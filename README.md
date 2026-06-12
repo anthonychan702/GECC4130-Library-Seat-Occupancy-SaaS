@@ -137,6 +137,12 @@ A reasonable split is to assign website implementation to the web-development ro
 Possible future improvements include live data ingestion, zone-level occupancy prediction, better map-based visualization, and richer validation using sensor data.[2][6]
 If institutional support becomes available later, a scheduled feed or API can replace manual CSV import for near-real-time updates.[2]
 
+
+
+
+
+<img width="1260" height="830" alt="螢幕截圖 2026-06-12 下午6 56 43" src="https://github.com/user-attachments/assets/0625043a-3874-428f-9a34-ebd43f8f180d" />
+
 ## Acknowledgment
 
 This repository documents a GECC4130 Senior Seminar project that integrates data collection, statistical modeling, and web-system development into a practical study-space forecasting platform for the CUHK CC Library.[1]
