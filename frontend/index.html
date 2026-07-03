@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CC Library Dashboard</title>
+    <link rel = "icon" href = "images/icon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-header">
+    <img src="images/icon.png" class="site-logo">
+    <h1 class="page-title">CC Library Analytics Dashboard</h1>
+    </div>
+
+
+
+
+
+    <div class="cards-row">
+        <div class="occupancy-card">
+            <div class="occupancy-left">
+                <p class="occupancy-title">Number of People in Library</p>
+
+                <div class="occupancy-number-row">
+                    <span class="occupancy-icon">
+                        <img src="images/people.png" class="people-icon">
+                    </span>
+                    <h1 class="occupancy-number" id= "current_occupancy">0+</h1>
+                </div>
+
+                <p class="occupancy-status" id = "occupancy_mes">Busy now</p>
+            </div>
+
+            <div class="occupancy-right">
+                <canvas id="occupancyChart"> Chart here </canvas>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="forecast-card">
+            <div class="forecast-left">
+                    <p class="forecast-title">Future Occupancy Forecast</p>
+
+                <div class="forecast-number-row">
+                    <span class="forecast-icon"><img src="images/forcasting.png" class="people-icon"></span>
+                    <h1 class="forecast-number" id= "predicted_occupancy">0+</h1>
+                </div>
+
+                <p class="forecast-status" id = "forecast_mes">Predicted peak at 4 PM</p>
+            </div>
+
+            <div class="forecast-right">
+                <canvas id="forecastChart">  Chart here </canvas>
+            </div>
+        </div>
+        
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <section class="map-section">
+        <div class="map-section-header">
+            <h2>Interactive Floor Map</h2>
+            <button class="edit-pref-btn" id="editPreferenceBtn">Edit Preference</button>
+        </div>
+
+        <div class="map-layout">
+
+            <div class="map-wrapper" id="mapWrapper">
+                <img id="floorImage" src="" alt="Library floor map" class="floor-map">
+                <div class="map-zone zone-reading" data-zone="reading"> </div>
+                <div class="map-zone zone-music" data-zone="music"> </div>
+                <div class="map-zone zone-books" data-zone="books"> </div>
+                <div class="map-zone zone-reference" data-zone="reference"> </div>
+
+                <div class="floor-select-wrap">
+                    <select id="floorSelect" class="floor-select">
+                        <option value="second" >2F</option>
+                        <option value="first">1F</option>
+                        <option value="ground" selected>G</option>
+                        <option value="lower_ground">LG</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id = "info">
+
+                <div class="map-legend-box">
+                    <div class="legend-item">
+                        <span class="legend-swatch recommendation-swatch"></span>
+                        <span>Recommended Zone</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch normal-swatch"></span>
+                        <span>Quiet Study Zone</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch pc-swatch"></span>
+                        <span>PC Zone</span>
+                    </div>
+                </div>
+
+                <div class="floor-info" id="floorInfo"> </div>
+
+                <div class="zone-info" id="zoneInfo">
+                    Hover over an area to view statistics.
+                </div>
+
+            </div>
+
+
+
+
+
+
+        </div>
+    </section>
+
+
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeM0z9in0MSEigYvZVeV8LeA6fVqlztaWQQHdGKs7r5bC18ow/viewform?usp=header" class="feedback-btn"> We need your feedback! 🤤</a>
+
+
+    <div class="preference-modal" id="preferenceModal">
+    <div class="preference-backdrop"> </div>
+
+    <div class="preference-dialog">
+        <button class="modal-close" id="closePreferenceModal" aria-label="Close">×</button>
+
+        <h2 class="preference-title">Welcome to CC Library Analytics Dashboard</h2>
+        <p class="preference-subtitle">Tell us your study preferences first.</p>
+
+        <div class="preference-group">
+        <label for="studyPreference">Study preference</label>
+        <select id="studyPreference">
+            <option value="quiet">Quiet zone</option>
+            <option value="low-crowd">Less crowded area</option>
+            <option value="cooler">Cooler area</option>
+        </select>
+        </div>
+
+        <div class="preference-group">
+        <label for="preferredFloor">Preferred floor</label>
+        <select id="preferredFloor">
+            <option value="second">2F</option>
+            <option value="first">1F</option>
+            <option value="ground">G</option>
+            <option value="lower_ground">LG</option>
+        </select>
+        </div>
+
+        <div class="preference-group checkbox-row">
+        <input type="checkbox" id="receiveTips">
+        <label for="receiveTips">Show me study recommendations</label>
+        </div>
+
+        <div class="preference-actions">
+        <button class="preference-secondary" id="skipPreference">Skip</button>
+        <button class="preference-primary" id="savePreference">Save Preference</button>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="app.js"></script>
+
+    <script type = "module" src ="app.js"> </script>
+
+</body>
+</html>

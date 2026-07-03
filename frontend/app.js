@@ -1,0 +1,540 @@
+import { floors } from "./floor-zone.js";
+
+const mapWrapper = document.getElementById("mapWrapper");
+const floorImage = document.getElementById("floorImage");
+const zoneInfo = document.getElementById("zoneInfo");
+const floorInfo = document.getElementById("floorInfo");
+
+function renderFloor(floorKey) {
+  const floor = floors[floorKey];
+  floorImage.src = floor.image;
+
+  mapWrapper.querySelectorAll(".map-zone").forEach(el => el.remove());
+
+  floorInfo.innerHTML = `
+      <h3>${floor.overview.name} Floor Overview</h3>
+      <p>🌡 Temperature: ${floor.overview.temperature}°C</p>
+      <p>🔊 Noise: ${floor.overview.noise}dB</p>
+  `;
+
+
+
+
+  floor.zones.forEach(zone => {
+    const div = document.createElement("div");
+    div.className = "map-zone";
+    div.style.left = zone.left;
+    div.style.top = zone.top;
+    div.style.width = zone.width;
+    div.style.height = zone.height;
+    div.dataset.id = zone.id;
+
+    if (zone.recommended) {
+        div.classList.add("recommended-zone");
+    }
+
+    if (zone.type == "pc") {
+        div.classList.add("pc-zone");
+    }
+
+
+    div.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showInfo(zone);
+    });
+
+    mapWrapper.appendChild(div);
+  });
+}
+
+
+
+function showInfo(zone) {
+  zoneInfo.innerHTML = `
+    <h3>${zone.name}</h3>
+    <p>🌡 Temperature: ${zone.stats.temperature}°C</p>
+    <p>🔊 Noise: ${zone.stats.noise}dB</p>
+    <p>Type: ${zone.type}</p>
+    <p>👥 Occupancy: ${zone.stats.occupancy}</p>
+    <p>📈 Utilization: ${zone.stats.utilization}</p>
+    <p>🟢 Status: ${zone.stats.status}</p>
+  `;
+}
+
+
+renderFloor("ground");
+document.getElementById("floorSelect").addEventListener("change", (event)=>{
+    const selectedValue = event.target.value;
+    renderFloor(selectedValue);
+});
+
+
+
+
+
+const occupancy_mes = document.getElementById("occupancy_mes");
+const prediction_mes = document.getElementById("forecast_mes");
+
+const current_occupancy = document.getElementById("current_occupancy");
+const predicted_occupancy = document.getElementById("predicted_occupancy");
+// fetch data from backend api
+
+const API_BASE = "";      // backend api local url http://127.0.0.1:8000
+
+let isLoadingDashboard = false;
+
+async function loadDashboard(){
+
+    if (isLoadingDashboard) return;
+    isLoadingDashboard = true;              // loading lock
+
+    try{
+    const [occupancyRes, predictionRes] = await Promise.all([
+      fetch(`${API_BASE}/occupancy/current`),
+      fetch(`${API_BASE}/prediction/next-hour`)
+    ]);
+
+    if (!occupancyRes.ok || !predictionRes.ok) {
+      throw new Error("API request failed");
+    }
+
+    const occupancyJSON = await occupancyRes.json();
+    const predictionJSON = await predictionRes.json();
+
+    current_occupancy.textContent = `${occupancyJSON.current_occupancy}+ `;
+    predicted_occupancy.textContent = `${predictionJSON.predicted_occupancy}+ `;
+
+
+    if (occupancyJSON.current_occupancy > 100){
+        occupancy_mes.textContent = "Busy now";
+    }
+    else{
+        occupancy_mes.textContent = "Available";
+    }
+    prediction_mes.textContent = `Predicted peak at ${predictionJSON.predicted_peak} `;
+
+
+
+    } catch (error){
+        console.error(error);
+        occupancy_mes.textContent = "Failed to load data";
+        prediction_mes.textContent = "Failed to load data";
+
+    } finally {
+    isLoadingDashboard = false;
+  }
+}
+
+
+const timeID = setInterval(loadDashboard, 1000);   // 1 update per second
+
+
+
+
+
+
+
+
+let occupancyChart;
+let forecastChart;
+const occupancyCtx = document.getElementById("occupancyChart");
+const forecastCtx = document.getElementById("forecastChart");
+
+function createGradient(ctx, chartArea, colorTop, colorBottom) {
+  const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+  gradient.addColorStop(0, colorTop);
+  gradient.addColorStop(1, colorBottom);
+  return gradient;
+}
+
+
+function initCharts(){
+    occupancyChart = new Chart(occupancyCtx, {
+        type: "line",
+        data: {
+            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            datasets: [
+                {
+                    label: "Today",
+                    data: [18, 17, 16, 20, 78, 110, 130, null],
+                    borderColor: "#f0c53f",
+                    backgroundColor: (context) => {
+                        const { chart } = context;
+                        const { ctx, chartArea } = chart;
+                        if (!chartArea) return "rgba(255, 214, 92, 0.28)";
+                        const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                        gradient.addColorStop(0, "rgba(255, 214, 92, 0.55)");
+                        gradient.addColorStop(1, "rgba(255, 214, 92, 0.06)");
+                        return gradient;
+                    },
+                    fill: true,
+                    tension: 0.42,
+                    borderWidth: 3,
+                    pointRadius: [0, 0, 0, 0, 0, 0, 5, 0],
+                    pointHoverRadius: 5,
+                    pointBorderWidth: 2,
+                    pointBackgroundColor: "#ffffff",
+                    pointBorderColor: "#f0c53f",
+                    pointBorderWidth: 1,
+                    borderWidth: 1,
+                    spanGaps: false,
+                    order: 1
+                },
+                {
+                    label: "Last Week",
+                    data: [25, 24, 22, 20, 55, 82, 98, 78],
+                    borderColor: "rgba(171,145,59,0.78)",
+                    backgroundColor: "rgba(120, 96, 28, 0.38)",
+                    fill: true,
+                    tension: 0.42,
+                    borderWidth: 1,
+                    pointRadius: 0,
+                    order: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: { top: 4, right: 6, bottom: 0, left: 0 }
+            },
+            plugins: {
+                legend: {
+                position: "top",
+                align: "end",
+                labels: {
+                    color: "#f7f4ff",
+                    usePointStyle: true,
+                    pointStyle: "circle",
+                    boxWidth: 6,
+                    boxHeight: 6,
+                    padding: 10,
+                    font: {size: 10, weight: "600"}
+                }
+                },
+                tooltip: {enabled: true},
+                verticalLinePlugin: {
+                    index: 6,
+                    datasetIndex: 0,
+                    color: "rgba(255,255,255,0.9)"
+                }
+            },
+            scales: {
+                x: {
+                    offset: false,
+                    ticks: { 
+                        color: "rgba(255,255,255,0.9)",
+                        font: {size: 9, weight: "600"},
+                        grid: { display: false },
+                        maxRotation: 0,
+                        minRotation: 0,
+                        padding: 6,
+                        autoSkip: false
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                        drawTicks: true,
+                        tickLength: 8,
+                        color: "rgba(255,255,255,0.9)",
+                        lineWidth: 1
+                    },
+                    border: {
+                        display: true,
+                        color: "rgba(255,255,255,0.95)",
+                        width: 1
+                    }
+                },
+
+                y: {
+                    display: false,
+                    beginAtZero: true,
+                    grid: { display: false },
+                    border: { display: false }
+                }
+            },
+            elements: {line: {borderWidth: 1}}
+        }});
+
+
+
+
+    forecastChart = new Chart(forecastCtx, {
+    type: "line",
+    data: {
+        labels: ["12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM"],
+        datasets: [
+        {
+            label: "Forecast",
+            data: [18, 17, 16, 20, 78, 110, 130, 100],
+            borderColor: "#c8b8ff",
+            backgroundColor: (context) => {
+            const { chart } = context;
+            const { ctx, chartArea } = chart;
+            if (!chartArea) return "rgba(200, 184, 255, 0.24)";
+            const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+            gradient.addColorStop(0, "rgba(200, 184, 255, 0.42)");
+            gradient.addColorStop(1, "rgba(200, 184, 255, 0.06)");
+            return gradient;
+            },
+            fill: true,
+            tension: 0.42,
+            borderWidth: 1,
+            pointRadius: [0, 0, 0, 0, 4, 0, 0],
+            pointHoverRadius: 4,
+            pointBackgroundColor: "#ffffff",
+            pointBorderColor: "#c8b8ff",
+            pointBorderWidth: 1,
+            spanGaps: false
+        }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+        padding: { top: 4, right: 6, bottom: 0, left: 0 }
+        },
+        plugins: {
+        legend: {
+            position: "top",
+            align: "end",
+            labels: {
+            color: "#f7f4ff",
+            usePointStyle: true,
+            pointStyle: "circle",
+            boxWidth: 6,
+            boxHeight: 6,
+            padding: 10,
+            font: {
+                size: 10,
+                weight: "600"
+            }
+            }
+        },
+        tooltip: {
+            enabled: true
+        },
+        verticalLinePlugin: {
+            index: 4,          // 4 PM
+            datasetIndex: 0,
+            color: "rgba(255,255,255,0.78)"
+        }
+        },
+        scales: {
+        x: {
+            offset: false,
+            ticks: {
+            color: "rgba(255,255,255,0.9)",
+            font: {
+                size: 9,
+                weight: "600"
+            },
+            maxRotation: 0,
+            minRotation: 0,
+            padding: 6,
+            autoSkip: false
+            },
+            grid: {
+            drawOnChartArea: false,
+            drawTicks: true,
+            tickLength: 8,
+            color: "rgba(255,255,255,0.9)",
+            lineWidth: 1
+            },
+            border: {
+            display: true,
+            color: "rgba(255,255,255,0.95)",
+            width: 1
+            }
+        },
+        y: {
+            display: false,
+            beginAtZero: true,
+            grid: { display: false },
+            border: { display: false }
+        }
+        },
+        elements: {
+        line: {
+            borderWidth: 1
+        }
+        }
+    }
+    });
+}
+
+
+
+const verticalLinePlugin = {
+  id: "verticalLinePlugin",
+  beforeDatasetsDraw(chart, args, pluginOptions) {
+    const { ctx, chartArea, scales } = chart;
+    const activeIndex = pluginOptions.index;
+    const datasetIndex = pluginOptions.datasetIndex ?? 0;
+
+    if (activeIndex == null) return;
+    const meta = chart.getDatasetMeta(datasetIndex);
+    const point = meta?.data?.[activeIndex];
+    if (!point) return;
+    const pointRadius = 4;   
+    const lineStartY = point.y + pointRadius + 4;
+
+
+    ctx.save();
+    ctx.beginPath();
+
+    ctx.moveTo(point.x, lineStartY);
+    ctx.lineTo(point.x, chartArea.bottom);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = pluginOptions.color || "rgba(255,255,255,0.85)";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 9, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 15, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.08)";
+    ctx.fill();
+
+    ctx.restore();
+  }
+};
+
+Chart.register(verticalLinePlugin);
+
+
+loadDashboard();
+initCharts();
+
+
+
+
+
+
+
+
+
+
+// Cookie and preference
+
+
+function setCookie(name, value, days = 180) {
+  const maxAge = days * 24 * 60 * 60;                 // browser will save document.cookie
+  document.cookie = `${name}=${encodeURIComponent(value)};             
+                     path=/; 
+                     max-age=${maxAge}; 
+                     samesite=lax`;
+}
+
+
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+
+async function savePreferenceCookie(pref) {                   // pass pref to backend and save in frontend cookie
+  const res = await fetch("/api/preferences", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(pref)                              
+  });
+
+  if (!res.ok){
+    throw new Error("save failed");
+  }
+  setCookie("cc_pref", JSON.stringify(pref), 180);
+  console.log(pref);
+}
+
+
+
+
+function parsePreferenceCookie() {
+  const raw = getCookie("cc_pref");
+  if (!raw) return null;
+
+  const [study_preference, preferred_floor] = raw.split("|");
+  if (!study_preference || !preferred_floor) return null;
+
+  return { study_preference, preferred_floor };
+}
+
+
+
+
+// asking for preference
+const preferenceModal = document.getElementById("preferenceModal");
+const close = document.getElementById("closePreferenceModal");
+const skip = document.getElementById("skipPreference");
+const save = document.getElementById("savePreference");
+
+
+function closeModal() {preferenceModal.classList.add("hidden");}
+function showModal() {;preferenceModal.classList.remove("hidden");}
+
+close.addEventListener("click", closeModal);
+
+document.getElementById("editPreferenceBtn").addEventListener("click", showModal);
+
+document.addEventListener("DOMContentLoaded", () => {      // checking cookie before showing after loading
+    const savedPref = parsePreferenceCookie();
+    if (savedPref) {closeModal();} else {showModal();}
+});
+
+
+skip.addEventListener("click", async () => {
+    const studyPreference = document.getElementById("studyPreference").value;
+    const preferredFloor = document.getElementById("preferredFloor").value;
+    const pref = {                       //JSON
+      study_preference: "N/A",
+      preferred_floor: "N/A"
+    }
+    try {
+      await savePreferenceCookie(pref);
+      closeModal();
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save preference.");
+    }
+
+    closeModal();
+});
+
+
+save.addEventListener("click", async () => {
+    const studyPreference = document.getElementById("studyPreference").value;
+    const preferredFloor = document.getElementById("preferredFloor").value;
+
+    if (!studyPreference || !preferredFloor) {
+        alert("Please select both study preference and preferred floor.");
+        return;
+    }
+
+    const pref = {                       //JSON
+      study_preference: studyPreference,
+      preferred_floor: preferredFloor
+    };
+
+    try {
+      await savePreferenceCookie(pref);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save preference.");
+    }
+    document.getElementById("floorSelect").value = preferredFloor;
+    renderFloor(preferredFloor);
+
+    closeModal();
+});
+
+
+
+// real time keep checking the latest statistics (setTimeInterval) + data structure design
+
+

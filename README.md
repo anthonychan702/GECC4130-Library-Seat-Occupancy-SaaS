@@ -140,7 +140,6 @@ If institutional support becomes available later, a scheduled feed or API can re
 
 
 
-
 <img width="1260" height="830" alt="螢幕截圖 2026-06-12 下午6 56 43" src="https://github.com/user-attachments/assets/0625043a-3874-428f-9a34-ebd43f8f180d" />
 
 ## Acknowledgment
