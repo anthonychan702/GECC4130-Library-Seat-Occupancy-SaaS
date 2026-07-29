@@ -5,164 +5,13 @@ export const floors = {
           name: `Second`,
           noise: ` ` , 
           temperature: ` `,
+          humidity: ` `,
+          zone_id: `2F_overview`
     },
     zones: [
       {
-        id: "2f_reading1",
-        name: "2/F Quiet Study Zone 1",
-        type: "reading",
-        left: "41.5%",
-        top: "12%",
-        width: "8.35%",
-        height: "5.75%",
-        recommended: true,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_reading2",
-        name: "2/F Quiet Study Zone 2",
-        type: "reading",
-        left: "64%",
-        top: "12%",
-        width: "8.35%",
-        height: "5.75%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_reading3",
-        name: "2/F Quiet Study Zone 3",
-        type: "reading",
-        left: "54%",
-        top: "24.5%",
-        width: "5.85%",
-        height: "7.5%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_reading4",
-        name: "2/F Quiet Study Zone 4",
-        type: "reading",
-        left: "30.2%",
-        top: "11.9%",
-        width: "6.45%",
-        height: "20.5%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_reading5",
-        name: "2/F Quiet Study Zone 5",
-        type: "reading",
-        left: "30.2%",
-        top: "37.1%",
-        width: "6.45%",
-        height: "20.5%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_reading6",
-        name: "2/F Quiet Study Zone 6",
-        type: "reading",
-        left: "41.2%",
-        top: "69.1%",
-        width: "10.8625%",
-        height: "24.8%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_reading7",
-        name: "2/F Quiet Study Zone 7",
-        type: "reading",
-        left: "52.0025%",
-        top: "69.1%",
-        width: "10.8625%",
-        height: "24.8%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_reading8",
-        name: "2/F Quiet Study Zone 8",
-        type: "reading",
-        left: "62.805%",
-        top: "69.1%",
-        width: "10.8625%",
-        height: "24.8%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_pc1",
-        name: "2/F PC Zone",
-        type: "pc",
-        left: "73.65%",
-        top: "69.1%",
-        width: "10.8625%",
-        height: "24.8%",
-        recommended: false,
-        stats: {
-          noise: ` ` , 
-          temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
-        }
-      },
-        {
-        id: "2f_hub1",
-        name: "2/F Study Hubs",
+        id: "2F_hub1",
+        name: "2/F Study Hubs 1",
         type: "reading",
         left: "4.9%",
         top: "37.9%",
@@ -172,9 +21,142 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_study2",
+        name: "2/F Quiet Study Zone 2",
+        type: "reading",
+        left: "30.2%",
+        top: "11.9%",
+        width: "6.45%",
+        height: "20.5%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_study3",
+        name: "2/F Quiet Study Zone 3",
+        type: "reading",
+        left: "30.2%",
+        top: "37.1%",
+        width: "6.45%",
+        height: "20.5%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+      {
+        id: "2F_study4",
+        name: "2/F Quiet Study Zone 4",
+        type: "reading",
+        left: "41.5%",
+        top: "12%",
+        width: "8.35%",
+        height: "5.75%",
+        recommended: true,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_study6",
+        name: "2/F Quiet Study Zone 6",
+        type: "reading",
+        left: "64%",
+        top: "12%",
+        width: "8.35%",
+        height: "5.75%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_study5",
+        name: "2/F Quiet Study Zone 5",
+        type: "reading",
+        left: "54%",
+        top: "24.5%",
+        width: "5.85%",
+        height: "7.5%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_study7",
+        name: "2/F Quiet Study Zone 7",
+        type: "reading",
+        left: "41.2%",
+        top: "69.1%",
+        width: "10.8625%",
+        height: "24.8%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_study8",
+        name: "2/F Quiet Study Zone 8",
+        type: "reading",
+        left: "52.0025%",
+        top: "69.1%",
+        width: "10.8625%",
+        height: "24.8%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_study9",
+        name: "2/F Quiet Study Zone 9",
+        type: "reading",
+        left: "62.805%",
+        top: "69.1%",
+        width: "10.8625%",
+        height: "24.8%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
+        }
+      },
+        {
+        id: "2F_pc10",
+        name: "2/F PC Zone 10",
+        type: "computing",
+        left: "73.65%",
+        top: "69.1%",
+        width: "10.8625%",
+        height: "24.8%",
+        recommended: false,
+        stats: {
+          noise: ` ` , 
+          temperature: ` `,
+          humidity: ` `
         }
       }
     ]
@@ -185,10 +167,12 @@ export const floors = {
             name: `First`,
             noise: ` ` , 
             temperature: ` `,
+            humidity: ` `,
+            zone_id: `1F_overview`
         },
         zones: [
       {
-        id: "1f_reading1",
+        id: "1F_study1",
         name: "1/F Quiet Study Zone 1",
         type: "reading",
         left: "7%",
@@ -199,13 +183,11 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading2",
+        id: "1F_study2",
         name: "1/F Quiet Study Zone 2",
         type: "reading",
         left: "41%",
@@ -216,13 +198,11 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading3",
+        id: "1F_study3",
         name: "1/F Quiet Study Zone 3",
         type: "reading",
         left: "64.7%",
@@ -233,13 +213,11 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading4",
+        id: "1F_study4",
         name: "1/F Quiet Study Zone 4",
         type: "reading",
         left: "17.1%",
@@ -250,14 +228,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading5",
-        name: "1/F Quiet Study Zone 5",
+        id: "1F_study6",
+        name: "1/F Quiet Study Zone 6",
         type: "reading",
         left: "53.1%",
         top: "31.1%",
@@ -267,14 +243,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading6",
-        name: "1/F Quiet Study Zone 6",
+        id: "1F_study5",
+        name: "1/F Quiet Study Zone 5",
         type: "reading",
         left: "29.6%",
         top: "42.6%",
@@ -284,14 +258,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading7",
-        name: "1/F Quiet Study Zone 7",
+        id: "1F_study10",
+        name: "1/F Quiet Study Zone 10",
         type: "reading",
         left: "40.8%",
         top: "66.9%",
@@ -301,14 +273,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading8",
-        name: "1/F Quiet Study Zone 8",
+        id: "1F_study7",
+        name: "1/F Quiet Study Zone 7",
         type: "reading",
         left: "3.2%",
         top: "87.3%",
@@ -318,14 +288,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
         {
-        id: "1f_hub1",
-        name: "1/F Study Hub",
+        id: "1F_hub8",
+        name: "1/F Study Hub 8",
         type: "reading",
         left: "18.3%",
         top: "60.9%",
@@ -335,13 +303,11 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading9",
+        id: "1F_study9",
         name: "1/F Quiet Study Zone 9",
         type: "reading",
         left: "21.8%",
@@ -352,14 +318,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading10",
-        name: "1/F Quiet Study Zone 10",
+        id: "1F_study11",
+        name: "1/F Quiet Study Zone 11",
         type: "reading",
         left: "52.015%",
         top: "66.9%",
@@ -369,14 +333,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_reading11",
-        name: "1/F Quiet Study Zone 11",
+        id: "1F_study12",
+        name: "1/F Quiet Study Zone 12",
         type: "reading",
         left: "63.26%",
         top: "66.9%",
@@ -386,15 +348,13 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "1f_pc",
-        name: "1/F PC Zone",
-        type: "pc",
+        id: "1F_pc13",
+        name: "1/F PC Zone 13",
+        type: "computing",
         left: "74.5%",
         top: "66.9%",
         width: "11.275%",
@@ -403,9 +363,7 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       }
     ]
@@ -416,11 +374,13 @@ export const floors = {
             name: `Ground`,
             noise: ` ` , 
             temperature: ` `,
+            humidity: ` `,
+            zone_id: `GF_overview`
         },
         zones: [
       {
-        id: "gf_reading1",
-        name: "G/F Quiet Study Zone 1",
+        id: "GF_study5",
+        name: "G/F Quiet Study Zone 5",
         type: "reading",
         left: "38.5%",
         top: "69.2%",
@@ -430,14 +390,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_reading2",
-        name: "G/F Quiet Study Zone 2",
+        id: "GF_study9",
+        name: "G/F Quiet Study Zone 9",
         type: "reading",
         left: "76.8%",
         top: "42.7%",
@@ -447,14 +405,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_reading3",
-        name: "G/F Quiet Study Zone 3",
+        id: "GF_study2",
+        name: "G/F Quiet Study Zone 2",
         type: "reading",
         left: "34.8%",
         top: "0.7%",
@@ -464,14 +420,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_reading4",
-        name: "G/F Quiet Study Zone 4",
+        id: "GF_study6",
+        name: "G/F Quiet Study Zone 6",
         type: "reading",
         left: "50.405%",
         top: "69.2%",
@@ -481,14 +435,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_reading5",
-        name: "G/F Quiet Study Zone 5",
+        id: "GF_study7",
+        name: "G/F Quiet Study Zone 7",
         type: "reading",
         left: "62.34%",
         top: "69.2%",
@@ -498,15 +450,13 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_pc",
-        name: "G/F PC Zone",
-        type: "pc",
+        id: "GF_pc8",
+        name: "G/F PC Zone 8",
+        type: "computing",
         left: "74.3%",
         top: "69.2%",
         width: "11.975%",
@@ -515,15 +465,13 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_pc",
-        name: "G/F PC Zone",
-        type: "pc",
+        id: "GF_pc3",
+        name: "G/F PC Zone 3",
+        type: "computing",
         left: "46.1%",
         top: "0.8%",
         width: "27.775%",
@@ -532,14 +480,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_reading6",
-        name: "G/F Quiet Study Zone 6",
+        id: "GF_study4",
+        name: "G/F Quiet Study Zone 4",
         type: "reading",
         left: "47.34%",
         top: "24.4%",
@@ -549,14 +495,12 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       },
       {
-        id: "gf_reading7",
-        name: "G/F Quiet Study Zone 7",
+        id: "GF_study1",
+        name: "G/F Quiet Study Zone 1",
         type: "reading",
         left: "0%",
         top: "50.9%",
@@ -566,9 +510,7 @@ export const floors = {
         stats: {
           noise: ` ` , 
           temperature: ` `,
-          occupancy: "68 people",
-          utilization: "74%",
-          status: "Busy"
+          humidity: ` `
         }
       }
         ]
@@ -579,6 +521,8 @@ export const floors = {
             name: `Lower Ground`,
             noise: ` ` , 
             temperature: ` `,
+            humidity: ` `,
+            zone_id: `LG_overview`
         },
         zones: [ ]
   }

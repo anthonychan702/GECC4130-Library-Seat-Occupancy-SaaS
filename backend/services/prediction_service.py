@@ -1,8 +1,15 @@
 from datetime import datetime, timezone
 from backend.data_structure import OccupancyStore, ForecastPoint
 
+# services determine the response data logic
+
 # mock data
 def get_predicted_occupancy_data():
+
+
+
+
+    
     return {
         "library_name": "CUHK CC Library",
         "next_period": "4pm",

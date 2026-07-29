@@ -5,19 +5,44 @@ const floorImage = document.getElementById("floorImage");
 const zoneInfo = document.getElementById("zoneInfo");
 const floorInfo = document.getElementById("floorInfo");
 
-function renderFloor(floorKey) {
+
+
+const API_BASE = "";      // backend api local url http://127.0.0.1:8000
+
+
+
+
+async function renderFloor(floorKey) {
   const floor = floors[floorKey];
   floorImage.src = floor.image;
 
   mapWrapper.querySelectorAll(".map-zone").forEach(el => el.remove());
 
-  floorInfo.innerHTML = `
-      <h3>${floor.overview.name} Floor Overview</h3>
-      <p>🌡 Temperature: ${floor.overview.temperature}°C</p>
-      <p>🔊 Noise: ${floor.overview.noise}dB</p>
-  `;
 
+try{
+    const response = await fetch(`${API_BASE}/env/environmental-data?zone=${floor.overview.zone_id}`);
 
+    if (!response.ok || response == null) {
+        floorInfo.innerHTML = `
+            <h3>${floor.overview.name} Floor Overview</h3>
+            <p>🌡 Temperature: ${floor.overview.temperature} °C</p>
+            <p>🔊 Noise: ${floor.overview.noise} dB</p>
+            <p>💧 Humidity: ${floor.overview.humidity}%</p>
+        `;
+    }
+    else if (response.ok){
+        const data = await response.json();
+
+        floorInfo.innerHTML = `
+            <h3>${floor.overview.name} Floor Overview</h3>
+            <p>🌡 Temperature: ${data.temperature_c} °C</p>
+            <p>🔊 Noise: ${data.noise_db} dB</p>
+            <p>💧 Humidity: ${data.humidity_percent}%</p>
+        `;
+    }
+    } catch (error){
+        console.error(error);
+}
 
 
   floor.zones.forEach(zone => {
@@ -33,7 +58,7 @@ function renderFloor(floorKey) {
         div.classList.add("recommended-zone");
     }
 
-    if (zone.type == "pc") {
+    if (zone.type == "computing") {
         div.classList.add("pc-zone");
     }
 
@@ -49,17 +74,9 @@ function renderFloor(floorKey) {
 
 
 
-function showInfo(zone) {
-  zoneInfo.innerHTML = `
-    <h3>${zone.name}</h3>
-    <p>🌡 Temperature: ${zone.stats.temperature}°C</p>
-    <p>🔊 Noise: ${zone.stats.noise}dB</p>
-    <p>Type: ${zone.type}</p>
-    <p>👥 Occupancy: ${zone.stats.occupancy}</p>
-    <p>📈 Utilization: ${zone.stats.utilization}</p>
-    <p>🟢 Status: ${zone.stats.status}</p>
-  `;
-}
+
+
+
 
 
 renderFloor("ground");
@@ -79,7 +96,7 @@ const current_occupancy = document.getElementById("current_occupancy");
 const predicted_occupancy = document.getElementById("predicted_occupancy");
 // fetch data from backend api
 
-const API_BASE = "";      // backend api local url http://127.0.0.1:8000
+
 
 let isLoadingDashboard = false;
 
@@ -104,16 +121,8 @@ async function loadDashboard(){
     current_occupancy.textContent = `${occupancyJSON.current_occupancy}+ `;
     predicted_occupancy.textContent = `${predictionJSON.predicted_occupancy}+ `;
 
-
-    if (occupancyJSON.current_occupancy > 100){
-        occupancy_mes.textContent = "Busy now";
-    }
-    else{
-        occupancy_mes.textContent = "Available";
-    }
+    occupancy_mes.textContent = `${occupancyJSON.message} `;
     prediction_mes.textContent = `Predicted peak at ${predictionJSON.predicted_peak} `;
-
-
 
     } catch (error){
         console.error(error);
@@ -121,7 +130,7 @@ async function loadDashboard(){
         prediction_mes.textContent = "Failed to load data";
 
     } finally {
-    isLoadingDashboard = false;
+        isLoadingDashboard = false;
   }
 }
 
@@ -130,6 +139,47 @@ const timeID = setInterval(loadDashboard, 1000);   // 1 update per second
 
 
 
+
+async function showInfo(zone) {
+
+    try{
+        const response = await fetch(`${API_BASE}/env/environmental-data?zone=${zone.id}`);
+
+        if (!response.ok) {
+                zoneInfo.innerHTML = `
+                <h3>${zone.name}</h3>
+                <p>📚 Type: </p>
+                <p>🌡 Temperature: °C</p>
+                <p>🔊 Noise: dB</p>
+                <p>💧 Humidity: %</p>
+            `;
+            return
+        }
+
+
+        const data = await response.json();
+
+        zoneInfo.innerHTML = `
+            <h3>${zone.name}</h3>
+            <p>📚 Type: ${zone.type}</p>
+            <p>🌡 Temperature: ${data.temperature_c} °C</p>
+            <p>🔊 Noise: ${data.noise_db} dB</p>
+            <p>💧 Humidity: ${data.humidity_percent}%</p>
+        `;
+
+
+        } catch (error){
+            console.error(error);
+            zoneInfo.innerHTML = `
+            <h3>${zone.name}</h3>
+            <p>📚 Type:</p>
+            <p>🌡 Temperature: °C</p>
+            <p>🔊 Noise: dB</p>
+            <p>💧 Humidity: %</p>
+            `;
+    }
+
+}
 
 
 
