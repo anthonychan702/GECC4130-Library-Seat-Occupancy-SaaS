@@ -200,7 +200,14 @@ def create_environment_reading(sensor: EnvironmentalReadingCreate, x_sensor_key:
 
     type = sensor.zone.split("_")[1].rstrip("0123456789")
 
-    type = "Quiet Study zone" if type == "study" else "PC zone"
+
+    if type == "study":
+        type = "Quiet Study zone"
+    elif type == "pc": 
+        type = "PC zone"
+    elif type == "overview":
+        type = "Floor Overview"
+
 
     stmt = insert(EnvironmentalReading).values(
         zone= sensor.zone,
