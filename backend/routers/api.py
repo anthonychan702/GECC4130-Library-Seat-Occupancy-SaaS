@@ -207,6 +207,8 @@ def create_environment_reading(sensor: EnvironmentalReadingCreate, x_sensor_key:
         type = "PC zone"
     elif type == "overview":
         type = "Floor Overview"
+    elif type == "hub":
+        type = "Study Hubs"
 
 
     stmt = insert(EnvironmentalReading).values(
