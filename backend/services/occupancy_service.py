@@ -13,7 +13,7 @@ def get_current_occupancy_data(db, OccupancyReading):
             "library_name": "CUHK CC Library",
             "current_occupancy": 0,
             "last_updated": datetime.now(timezone.utc),
-            "message": "Library is closed",
+            "message": "Library is closed 😭",
         }
 
 
@@ -23,8 +23,8 @@ def get_current_occupancy_data(db, OccupancyReading):
 
     current_occupancy = row.occupant_count if date == today else 0
 
-    message = "Busy now" if current_occupancy > 350 else "Available"
-    message = "Overload" if current_occupancy >= 500 else message
+    message = "Busy now 🔥" if current_occupancy > 350 else "Available 🟢"
+    message = "Overload 😖" if current_occupancy >= 500 else message
 
     w = now.weekday()
     t = now.time()
@@ -32,13 +32,13 @@ def get_current_occupancy_data(db, OccupancyReading):
 
     if w in (0, 1, 2, 3, 4) and not (time(8, 20) < t < time(22, 0)):
         current_occupancy = 0
-        message = "Library is closed"
+        message = "Library is closed 😭"
     elif w == 5 and not (time(8, 20) < t < time(19, 0)):
         current_occupancy = 0
-        message = "Library is closed"
+        message = "Library is closed 😭"
     elif w == 6 and not (time(11, 0) < t < time(19, 0)):
         current_occupancy = 0
-        message = "Library is closed"
+        message = "Library is closed 😭"
 
     return {
         "library_name": "CUHK CC Library",

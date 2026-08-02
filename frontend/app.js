@@ -149,6 +149,8 @@ async function loadDashboard(){
     occupancy_mes.textContent = `${occupancyJSON.message} `;
     prediction_mes.textContent = `Predicted peak at ${predictionJSON.predicted_peak} `;
 
+    updateOccupancy(occupancyJSON.current_occupancy);
+
     } catch (error){
         console.error(error);
         occupancy_mes.textContent = "Failed to load data";
@@ -641,7 +643,6 @@ function updateOccupancy(count) {
   fill.style.background = getOccupancyBarColor(percent);
 }
 
-updateOccupancy(490);
 
 
 
