@@ -30,6 +30,18 @@
                 </div>
 
                 <p class="occupancy-status" id = "occupancy_mes">Busy now</p>
+                <div class="occupancy-rate-block">
+                    <span class="occupancy-clock" id="occupancy_clock"> --:--:-- HKT</span>
+                    <div id = "progress">
+                    <div class="occupancy-rate-header">
+                        <span id="occupancy_rate_text">0/500 (0%)</span>
+                    </div>
+                    <div class="occupancy-rate-bar">
+                        <div class="occupancy-rate-fill" id="occupancy_rate_fill"></div>
+                    </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="occupancy-right">
@@ -110,6 +122,10 @@
                     <div class="legend-item">
                         <span class="legend-swatch pc-swatch"></span>
                         <span>PC Zone</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch hub-swatch"></span>
+                        <span>Study Hubs</span>
                     </div>
                 </div>
 

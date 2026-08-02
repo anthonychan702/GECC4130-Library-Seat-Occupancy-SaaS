@@ -48,7 +48,19 @@ body {
   width: 450px;
   box-sizing: border-box;
   overflow: hidden;
+  padding-bottom: 10px;
 }
+
+.occupancy-card{
+  height: 220px;
+}
+
+.forecast-card {
+  height: 180px;
+}
+
+
+
 
 .occupancy-left,
 .forecast-left {
@@ -56,6 +68,8 @@ body {
   min-width: 0;
   padding-right: 0;
   margin-right: -10px;
+  margin-top: -35px;
+  margin-bottom: -20px;
 }
 
 .occupancy-right,
@@ -67,7 +81,26 @@ body {
   align-items: center;
   margin: 0;
   margin-left: -40px;
+  margin-top: -35px;
+  margin-bottom: -30px;
 }
+
+
+.occupancy-right,
+.occupancy-left{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+
+
+.forecast-right,
+.forecast-left{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+
 
 .occupancy-title,
 .forecast-title {
@@ -113,6 +146,10 @@ body {
   margin-top: 10px;
   font-size: 14px;
   opacity: 0.9;
+}
+
+.occupancy-status{
+  margin-top: -10px;
 }
 
 .occupancy-chart-placeholder,
@@ -262,7 +299,7 @@ body {
 
   .occupancy-title,
   .forecast-title {
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 8px;
   }
 
@@ -270,6 +307,13 @@ body {
   .forecast-number-row {
     gap: 8px;
   }
+
+  .occupancy-number-row{
+    margin-bottom: -8px;
+  }
+
+
+
 
   .people-icon {
     width: 34px;
@@ -599,7 +643,7 @@ body {
 .floor-select-wrap {
   position: absolute;
   right: 16px;
-  bottom: 16px;
+  top: 16px;
   z-index: 20;
 
   display: flex;
@@ -645,21 +689,22 @@ body {
 }
 
 @media (max-width: 768px) {
-  .floor-select-wrap {
-    right: 10px;
-    bottom: 10px;
-    padding: 8px 10px;
-    border-radius: 12px;
-  }
 
   .floor-select-label {
     font-size: 11px;
   }
 
+  .floor-select-wrap {
+    right: 8px;
+    top: 8px;
+    padding: 4px 6px;
+  }
+
   .floor-select {
-    min-width: 74px;
-    padding: 7px 9px;
-    font-size: 13px;
+    min-width: 25px;
+    padding: 4px 6px;
+    font-size: 1px;
+    border-radius: 7px;
   }
 }
 
@@ -841,6 +886,12 @@ body {
   border: 2px solid rgba(5, 125, 59, 0.35);
 }
 
+.hub-swatch{
+  background: rgba(167, 199, 231, 0.20);
+  border: 2px solid rgba(167, 199, 231, 0.75);
+}
+
+
 
 @media (max-width: 768px) {
   .map-layout {
@@ -918,6 +969,42 @@ body {
     border-radius: 16px;
   }
 
+  .occupancy-card{
+    height: 150px;
+  }
+
+  .occupancy-left{
+    margin-top: -35px;
+    margin-bottom: -10px;
+  }
+
+  .occupancy-rate-bar {
+    width: 130%;
+    height: 8px;   /* thinner */
+    background: rgba(255, 255, 255, 0.72);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.10);
+    margin-bottom: -12px;
+    margin-top: 40px;
+    position: relative;
+    top: 30px;
+  }
+
+
+
+.occupancy-rate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  color: #f1d9ee;  
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 0px;
+}
+
+
   .occupancy-number,
   .forecast-number {
     font-size: 34px;
@@ -981,9 +1068,9 @@ body {
   }
 
   .floor-select {
-    min-width: 72px;
-    padding: 6px 8px;
-    font-size: 12px;
+    min-width: 30px;
+    padding: 4px 6px;
+    font-size: 10px;
   }
 
   #info {
@@ -1101,4 +1188,362 @@ body {
 .forecast-right {
     height: 100%;
 }
+}
+
+
+.hubs {
+  border: 2px solid #8FB6D9;
+  background-color: #DCEAF7;
+}
+
+.hubs:hover {
+  background: rgba(143, 182, 217, 0.30);
+  border-color: rgba(240, 247, 255, 0.78);
+}
+
+
+.occupancy-rate-block {
+  margin-top: 14px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.occupancy-rate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  color: #f1d9ee;   /* light purple */
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: -15px;
+}
+
+.occupancy-rate-bar {
+  width: 130%;
+  height: 8px;   /* thinner */
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.10);
+  margin-bottom: -6px;
+  margin-top: -10px;
+}
+
+.occupancy-rate-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: #2fa8ff;
+  transition: width 0.35s ease, background 0.35s ease;
+}
+
+
+
+
+.occupancy-card{
+  padding-bottom: 15px;
+}
+
+.occupancy-clock {
+  margin-top: 6px;
+  color: #f1d9ee;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+
+
+
+@media (max-width: 768px) {
+
+  .occupancy-rate-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+    color: #f1d9ee;  
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+
+  .occupancy-rate-bar {
+    margin-top: -26px;
+  }
+}
+
+
+
+.occupancy-clock {  
+  margin: 0;
+  font-size: 12px;
+  color: #f1d9ee;
+  width: 100px;
+  margin-left: 0px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+
+  .occupancy-clock {  
+    margin-top: -10px;
+    margin-bottom: -110px;
+  }
+
+  #occupancy_mes{
+    position: relative;
+    top: 15px;
+  }
+
+  #occupancy-rate-bar{
+    position: fixed;
+    top: 1500px;
+    border: solid 1px black;
+  }
+}
+
+
+
+/* ===== Desktop repair overrides ===== */
+@media (min-width: 768px) {
+
+  .occupancy-card{
+    height: 200px;
+    padding-top: 0px;
+  }
+
+  .forecast-card {
+    height: 180px;
+  }
+
+
+
+
+  .occupancy-left,
+  .forecast-left {
+    flex: 0.8;
+    min-width: 0;
+    padding-right: 0;
+    margin-right: -10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .occupancy-right,
+  .forecast-right {
+    flex: 1.2;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    margin-left: -40px;
+    margin-top: -35px;
+    margin-bottom: -30px;
+  }
+
+ .occupancy-right{
+    height: 80%;
+ }
+
+
+
+
+
+
+  .occupancy-right,
+  .occupancy-left{
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+
+
+  .forecast-right,
+  .forecast-left{
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+
+  .occupancy-left{
+    margin-top: 0px;
+    height: 100%;
+    margin-bottom: 0px;
+  }
+
+
+  #occupancy_mes{
+    position: relative;
+    top: 15px;
+  }
+
+  #occupancy-rate-bar{
+    position: fixed;
+    top: 0px;
+  }
+
+  .occupancy-card {
+    position: relative;
+    height: 200px;
+    overflow: hidden; 
+  }
+
+  .occupancy-left {
+    height: auto; 
+    margin: 0;
+    padding-bottom: 28px;
+  }
+
+  #occupancy_mes {
+    position: relative;
+    top: 0; 
+  }
+
+  #occupancy-rate-bar {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 12px;
+    top: auto;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .occupancy-card {
+    position: relative;
+    height: 210px;
+    overflow: hidden;
+    padding: 18px 17px;
+  }
+
+  .occupancy-left {
+    height: auto;
+    margin: 0;
+    margin-top: -46px;
+    padding-bottom: 0;
+  }
+
+  .occupancy-right {
+    height: 90%;
+    margin-top: -10px;
+    margin-right: -15px;
+    margin-left: -100px;
+  }
+
+  .occupancy-clock {
+    margin-top: -30px;
+  }
+
+  #occupancy_mes {
+    position: static;
+    top: auto;
+    margin-top: -1px;
+  }
+
+  .occupancy-status {
+    margin-top: 8px;
+  }
+
+  .occupancy-rate-block {
+    position: absolute;
+    left: 17px;
+    bottom: 14px;
+    width: 175px;
+    max-width: calc(100% - 34px);
+    margin: 0;
+  }
+
+  .occupancy-rate-header {
+    margin: 0 0 6px;
+  }
+
+  .occupancy-rate-bar {
+    width: 230%;
+    margin: 0;
+    position: static;
+  }
+
+  #occupancy_rate_text{
+    font-size: 16px;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .occupancy-card {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+    padding: 1px 17px;
+  }
+
+  .occupancy-left {
+    margin-top: 80px;
+    padding-bottom: 140px;
+  }
+  .occupancy-right {
+    height: 100%;
+    margin-right: -15px;
+    margin-left: -110px;
+    padding-bottom: 20px;
+  }
+  .occupancy-rate-block {
+    position: absolute;
+    left: 17px;
+    top: 89px;
+    bottom: 14px;
+    width: 175px;
+    max-width: calc(100% - 34px);
+    margin: 0;
+  }
+  #occupancy_mes {
+    position: static;
+    top: auto;
+    margin-top: 12px;
+    margin-bottom: 10px;
+  }
+
+  .occupancy-clock {
+    position: static;
+    top: 100px;
+    font-weight: 100;
+  }
+  .occupancy-rate-header {
+    margin: 0 0 6px;
+  }
+
+  .occupancy-rate-bar {
+    width: 180%;
+    height: 6px;
+    margin: 0;
+    position: static;
+  }
+
+  #occupancy_rate_text{
+    font-size: 14px;
+    font-weight: 100;
+    margin-bottom: -2px;
+    margin-top: 3px;
+  }
 }

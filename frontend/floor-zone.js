@@ -12,7 +12,7 @@ export const floors = {
       {
         id: "2F_hub1",
         name: "2/F Study Hubs 1",
-        type: "reading",
+        type: "collaborative",
         left: "4.9%",
         top: "37.9%",
         width: "22%",
@@ -294,7 +294,7 @@ export const floors = {
         {
         id: "1F_hub8",
         name: "1/F Study Hub 8",
-        type: "reading",
+        type: "collaborative",
         left: "18.3%",
         top: "60.9%",
         width: "1.8%",

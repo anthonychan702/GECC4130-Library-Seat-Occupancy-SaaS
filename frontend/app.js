@@ -61,6 +61,11 @@ try{
     if (zone.type == "computing") {
         div.classList.add("pc-zone");
     }
+    else if (zone.type == "collaborative") {
+        div.classList.add("hubs");
+    } 
+
+
 
 
     div.addEventListener("click", (e) => {
@@ -588,3 +593,51 @@ save.addEventListener("click", async () => {
 // real time keep checking the latest statistics (setTimeInterval) + data structure design
 
 
+
+
+const TOTAL_CAPACITY = 500;
+
+function getOccupancyBarColor(percent) {
+  if (percent < 60) {
+    return 'linear-gradient(90deg, #0d7ef2 0%, #35b0ff 100%)';
+  }
+  if (percent < 80) {
+    return 'linear-gradient(90deg, #0d7ef2 0%, #2fa8ff 45%, #ffd338 100%)';
+  }
+  if (percent < 90) {
+    return 'linear-gradient(90deg, #2fa8ff 0%, #ffd338 55%, #f39b20 100%)';
+  }
+  return 'linear-gradient(90deg, #2fa8ff 0%, #ffd338 45%, #f39b20 72%, #d93a2f 100%)';
+}
+
+function updateOccupancy(count) {
+  const percent = Math.min(100, Math.round((count / TOTAL_CAPACITY) * 100));
+
+  document.getElementById("current_occupancy").textContent = `${count}+`;
+  document.getElementById("occupancy_rate_text").textContent = `${count}/${TOTAL_CAPACITY} (${percent}%)`;
+
+  const fill = document.getElementById("occupancy_rate_fill");
+  fill.style.width = `${percent}%`;
+  fill.style.background = getOccupancyBarColor(percent);
+}
+
+updateOccupancy(490);
+
+
+
+
+function updateHKTClock() {
+  const now = new Date();
+  const time = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Hong_Kong',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  }).format(now);
+
+  document.getElementById('occupancy_clock').textContent = `${time}`;
+}
+
+updateHKTClock();
+setInterval(updateHKTClock, 1000);

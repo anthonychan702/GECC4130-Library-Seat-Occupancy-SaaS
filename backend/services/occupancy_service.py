@@ -23,7 +23,8 @@ def get_current_occupancy_data(db, OccupancyReading):
 
     current_occupancy = row.occupant_count if date == today else 0
 
-    message = "Busy now" if current_occupancy > 100 else "Available"
+    message = "Busy now" if current_occupancy > 350 else "Available"
+    message = "Overload" if current_occupancy >= 500 else message
 
     w = now.weekday()
     t = now.time()
