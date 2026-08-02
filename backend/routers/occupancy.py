@@ -19,10 +19,10 @@ def get_current_occupancy(db: Session = Depends(get_db)):
 
 @router.get("/today", response_model = TodayOccupancyResponse)
 def get_today_occupancy(db: Session = Depends(get_db)):
-    return get_today_occupancy_data(db, TodayOccupancyResponse)
+    return get_today_occupancy_data(db, OccupancyReading)
 
 
 
 @router.get("/last-week", response_model = LastWeekOccupancyResponse)
 def get_last_week_occupancy(db: Session = Depends(get_db)):
-    return get_last_week_occupancy_data(db, LastWeekOccupancyResponse)
+    return get_last_week_occupancy_data(db, OccupancyReading)

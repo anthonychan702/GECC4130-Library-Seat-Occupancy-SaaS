@@ -77,6 +77,9 @@ def get_today_occupancy_data(db, model):
     }
 
 
+
+
+
 def get_last_week_occupancy_data(db, model):
     last_week_date = (
         datetime.now(HKT).date() - timedelta(days=7)

@@ -234,20 +234,152 @@ const labels2 = ["8 AM", "10 AM", "12 PM", "2 PM","4 PM", "6 PM", "7 PM"];      
 const labels3 = ["11 AM", "12 AM", "1 PM","2 PM", "3 PM", "4 PM", "5 PM", "6 PM"];  // Sunday
 
 
+function getHongKongWeekday() {
+  const weekdayText = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Hong_Kong",
+    weekday: "short"
+  }).format(new Date());
+
+  const weekdayMap = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6
+  };
+
+  return weekdayMap[weekdayText];
+}
+
+
+function getTodayChartHours() {
+  return Array.from({ length: 17 }, (_, index) => index + 7);
+}
+
+function formatHour(hour) {
+  if (hour === 0) return "12 AM";
+  if (hour === 12) return "12 PM";
+
+  return hour > 12
+    ? `${hour - 12} PM`
+    : `${hour} AM`;
+}
 
 
 
+function isLibraryOpenHour(hour, weekday) {
+  // Monday to Friday
+  // 08:20:00–21:59:59 有效
+  // 08 bucket 代表 8:20–8:59:59
+  if (weekday >= 1 && weekday <= 5) {
+    return hour >= 8 && hour <= 21;
+  }
+
+  // Saturday
+  // 08:20:00–18:59:59 有效
+  if (weekday === 6) {
+    return hour >= 8 && hour <= 18;
+  }
+
+  // Sunday
+  // 11:00:01–18:59:59 有效
+  if (weekday === 0) {
+    return hour >= 11 && hour <= 18;
+  }
+
+  return false;
+}
 
 
-function initCharts(){
+function buildChartData(series, hours, weekday, cutoffHour = null) {
+  const occupancyByHour = new Map(
+    series.map(item => [
+      Number(item.time.split(":")[0]),
+      item.occupancy
+    ])
+  );
+
+  let previousOccupancy = 0;
+
+  return hours.map(hour => {
+    if (cutoffHour !== null && hour > cutoffHour) {
+      return null;
+    }
+
+    if (!isLibraryOpenHour(hour, weekday)) {
+      return 0;
+    }
+
+    if (occupancyByHour.has(hour)) {
+      previousOccupancy = occupancyByHour.get(hour);
+    }
+    return previousOccupancy;
+  });
+}
+
+
+
+ async function initCharts(){
+
+    try{
+    const [todaySeries, lastSeries] = await Promise.all([
+      fetch(`${API_BASE}/occupancy/today`),
+      fetch(`${API_BASE}/occupancy/last-week`)
+    ]);
+
+    if (!todaySeries.ok || !lastSeries.ok) {
+      throw new Error("API request failed");
+    }
+
+    const todayJSON = await todaySeries.json();
+    const lastJSON = await lastSeries.json();
+
+
+
+const chartHours = getTodayChartHours();
+
+const nowHKT = new Date().toLocaleString("en-US", {
+  timeZone: "Asia/Hong_Kong",
+  hour: "2-digit",
+  hourCycle: "h23"
+});
+
+const currentHour = Number(nowHKT);
+
+const currentHourIndex = chartHours.indexOf(currentHour);
+
+const shouldShowCurrentMarker = currentHourIndex >= 0;
+
+    const occupancyLabels = chartHours.map(hour =>`${String(hour).padStart(2, "0")}:00`);
+
+
+const weekday = getHongKongWeekday();
+
+const todayOccupancyData = buildChartData(
+  todayJSON.series,
+  chartHours,
+  weekday,
+  currentHour
+);
+
+const lastWeekOccupancyData = buildChartData(
+  lastJSON.series,
+  chartHours,
+  weekday
+);
+
+
+
     occupancyChart = new Chart(occupancyCtx, {
         type: "line",
         data: {
-            labels: labels1,
+            labels: occupancyLabels,
             datasets: [
                 {
                     label: "Today",
-                    data: [18, 17, 16, 20, 78, 110, 130, null],
+                    data: todayOccupancyData,
                     borderColor: "#f0c53f",
                     backgroundColor: (context) => {
                         const { chart } = context;
@@ -260,20 +392,23 @@ function initCharts(){
                     },
                     fill: true,
                     tension: 0.42,
-                    borderWidth: 3,
-                    pointRadius: [0, 0, 0, 0, 0, 0, 5, 0],
-                    pointHoverRadius: 5,
-                    pointBorderWidth: 2,
-                    pointBackgroundColor: "#ffffff",
-                    pointBorderColor: "#f0c53f",
-                    pointBorderWidth: 1,
                     borderWidth: 1,
-                    spanGaps: false,
-                    order: 1
+pointRadius: (context) => {
+  return (
+    shouldShowCurrentMarker &&
+    context.dataIndex === currentHourIndex
+  ) ? 5 : 0;
+},
+  pointHoverRadius: 5,
+  pointBackgroundColor: "#ffffff",
+  pointBorderColor: "#f0c53f",
+  pointBorderWidth: 1,
+  spanGaps: false,
+  order: 1
                 },
                 {
                     label: "Last Week",
-                    data: [25, 24, 22, 20, 55, 82, 98, 78],
+                    data: lastWeekOccupancyData,
                     borderColor: "rgba(171,145,59,0.78)",
                     backgroundColor: "rgba(120, 96, 28, 0.38)",
                     fill: true,
@@ -305,11 +440,11 @@ function initCharts(){
                 }
                 },
                 tooltip: {enabled: true},
-                verticalLinePlugin: {
-                    index: 6,
-                    datasetIndex: 0,
-                    color: "rgba(255,255,255,0.9)"
-                }
+verticalLinePlugin: {
+  index: currentHourIndex,
+  datasetIndex: 0,
+  color: "rgba(255,255,255,0.9)"
+}
             },
             scales: {
                 x: {
@@ -321,7 +456,12 @@ function initCharts(){
                         maxRotation: 0,
                         minRotation: 0,
                         padding: 6,
-                        autoSkip: false
+                        autoSkip: false,
+                        callback: function(value, index) {
+                            const hour = chartHours[index];
+                            if (hour % 2 === 1) {return formatHour(hour);}
+                            return "";
+                        }
                     },
                     grid: {
                         drawOnChartArea: false,
@@ -453,39 +593,63 @@ function initCharts(){
         }
     }
     });
-}
 
+    } catch (error){
+        console.error(error);
+    } 
+
+
+
+}
 
 
 const verticalLinePlugin = {
   id: "verticalLinePlugin",
+
   beforeDatasetsDraw(chart, args, pluginOptions) {
-    const { ctx, chartArea, scales } = chart;
+    const { ctx, chartArea } = chart;
+
     const activeIndex = pluginOptions.index;
     const datasetIndex = pluginOptions.datasetIndex ?? 0;
 
-    if (activeIndex == null) return;
+    // 例如凌晨 2 AM：
+    // currentHourIndex = -1
+    // chart 不顯示 marker
+    if (
+      !Number.isInteger(activeIndex) ||
+      activeIndex < 0
+    ) {
+      return;
+    }
+
     const meta = chart.getDatasetMeta(datasetIndex);
     const point = meta?.data?.[activeIndex];
-    if (!point) return;
-    const pointRadius = 4;   
+
+    if (!point) {
+      return;
+    }
+
+    const pointRadius = 4;
     const lineStartY = point.y + pointRadius + 4;
 
-
     ctx.save();
-    ctx.beginPath();
 
+    // Vertical line
+    ctx.beginPath();
     ctx.moveTo(point.x, lineStartY);
     ctx.lineTo(point.x, chartArea.bottom);
     ctx.lineWidth = 1;
-    ctx.strokeStyle = pluginOptions.color || "rgba(255,255,255,0.85)";
+    ctx.strokeStyle =
+      pluginOptions.color || "rgba(255,255,255,0.85)";
     ctx.stroke();
 
+    // Inner glow
     ctx.beginPath();
     ctx.arc(point.x, point.y, 9, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(255,255,255,0.12)";
     ctx.fill();
 
+    // Outer glow
     ctx.beginPath();
     ctx.arc(point.x, point.y, 15, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(255,255,255,0.08)";
