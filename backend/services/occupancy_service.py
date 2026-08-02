@@ -1,7 +1,6 @@
-from datetime import datetime, timezone, time
+from datetime import datetime, timezone, time, timedelta
 from backend.data_structure import OccupancyStore, ForecastPoint
 from zoneinfo import ZoneInfo
-
 
 HKT = ZoneInfo("Asia/Hong_Kong")
 
@@ -45,4 +44,64 @@ def get_current_occupancy_data(db, OccupancyReading):
         "current_occupancy": current_occupancy,
         "last_updated": datetime.now(timezone.utc),
         "message": message,
+    }
+
+
+
+
+def get_today_occupancy_data(db, model):
+    today = datetime.now(HKT).strftime("%Y-%m-%d")
+
+    rows = (
+        db.query(model)
+        .filter(model.hour_str.like(f"{today}_%"))
+        .order_by(model.hour_str.asc())
+        .all()
+    )
+
+    series = []
+
+    for row in rows:
+        if not row.hour_str:
+            continue
+
+        hour = row.hour_str.split("_")[1]
+
+        series.append({
+            "time": f"{hour}:00",
+            "occupancy": row.occupant_count or 0,
+        })
+
+    return {
+        "series": series,
+    }
+
+
+def get_last_week_occupancy_data(db, model):
+    last_week_date = (
+        datetime.now(HKT).date() - timedelta(days=7)
+    ).strftime("%Y-%m-%d")
+
+    rows = (
+        db.query(model)
+        .filter(model.hour_str.like(f"{last_week_date}_%"))
+        .order_by(model.hour_str.asc())
+        .all()
+    )
+
+    series = []
+
+    for row in rows:
+        if not row.hour_str:
+            continue
+
+        hour = row.hour_str.split("_")[1]
+
+        series.append({
+            "time": f"{hour}:00",
+            "occupancy": row.occupant_count or 0,
+        })
+
+    return {
+        "series": series,
     }

@@ -225,11 +225,25 @@ function createGradient(ctx, chartArea, colorTop, colorBottom) {
 }
 
 
+
+
+
+
+const labels1 = ["8 AM", "10 AM", "12 PM", "2 PM","4 PM", "6 PM", "8 PM", "10 PM"];   // Monday to Friday
+const labels2 = ["8 AM", "10 AM", "12 PM", "2 PM","4 PM", "6 PM", "7 PM"];           // Saturday
+const labels3 = ["11 AM", "12 AM", "1 PM","2 PM", "3 PM", "4 PM", "5 PM", "6 PM"];  // Sunday
+
+
+
+
+
+
+
 function initCharts(){
     occupancyChart = new Chart(occupancyCtx, {
         type: "line",
         data: {
-            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            labels: labels1,
             datasets: [
                 {
                     label: "Today",

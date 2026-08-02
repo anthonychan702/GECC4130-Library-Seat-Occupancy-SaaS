@@ -7,3 +7,15 @@ class OccupancyResponse(BaseModel):
     current_occupancy: int
     last_updated: datetime
     message: str
+
+
+class OccupancyPoint(BaseModel):
+    time: str
+    occupancy: int
+
+
+class TodayOccupancyResponse(BaseModel):
+    series: list[OccupancyPoint]
+
+class LastWeekOccupancyResponse(BaseModel):
+    series: list[OccupancyPoint]
