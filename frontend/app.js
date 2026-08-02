@@ -65,7 +65,27 @@ try{
         div.classList.add("hubs");
     } 
 
+    let emoji = "";
 
+    if (zone.type === "computing") {
+    emoji = "🖥️";
+    } else if (zone.type === "collaborative") {
+    emoji = "👥";
+    } else if (zone.type === "reading") {
+    emoji = "📚";
+    }
+
+
+    if (zone.recommended) {
+    emoji = "⭐";
+    }
+    
+    if (emoji) {
+    const emojiElement = document.createElement("span");
+    emojiElement.className = "zone-emoji";
+    emojiElement.textContent = emoji;
+    div.appendChild(emojiElement);
+    }
 
 
     div.addEventListener("click", (e) => {

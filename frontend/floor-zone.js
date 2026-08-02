@@ -26,7 +26,7 @@ export const floors = {
       },
         {
         id: "2F_study2",
-        name: "2/F Quiet Study Zone 2",
+        name: "2/F Quiet Study Zone 2 🤫",
         type: "reading",
         left: "30.2%",
         top: "11.9%",
@@ -41,7 +41,7 @@ export const floors = {
       },
         {
         id: "2F_study3",
-        name: "2/F Quiet Study Zone 3",
+        name: "2/F Quiet Study Zone 3 🤫",
         type: "reading",
         left: "30.2%",
         top: "37.1%",
@@ -56,7 +56,7 @@ export const floors = {
       },
       {
         id: "2F_study4",
-        name: "2/F Quiet Study Zone 4",
+        name: "2/F Quiet Study Zone 4 🤫",
         type: "reading",
         left: "41.5%",
         top: "12%",
@@ -71,7 +71,7 @@ export const floors = {
       },
         {
         id: "2F_study6",
-        name: "2/F Quiet Study Zone 6",
+        name: "2/F Quiet Study Zone 6 🤫",
         type: "reading",
         left: "64%",
         top: "12%",
@@ -86,7 +86,7 @@ export const floors = {
       },
         {
         id: "2F_study5",
-        name: "2/F Quiet Study Zone 5",
+        name: "2/F Quiet Study Zone 5 🤫",
         type: "reading",
         left: "54%",
         top: "24.5%",
@@ -101,7 +101,7 @@ export const floors = {
       },
         {
         id: "2F_study7",
-        name: "2/F Quiet Study Zone 7",
+        name: "2/F Quiet Study Zone 7 🤫",
         type: "reading",
         left: "41.2%",
         top: "69.1%",
@@ -116,7 +116,7 @@ export const floors = {
       },
         {
         id: "2F_study8",
-        name: "2/F Quiet Study Zone 8",
+        name: "2/F Quiet Study Zone 8 🤫",
         type: "reading",
         left: "52.0025%",
         top: "69.1%",
@@ -131,7 +131,7 @@ export const floors = {
       },
         {
         id: "2F_study9",
-        name: "2/F Quiet Study Zone 9",
+        name: "2/F Quiet Study Zone 9 🤫",
         type: "reading",
         left: "62.805%",
         top: "69.1%",
@@ -173,7 +173,7 @@ export const floors = {
         zones: [
       {
         id: "1F_study1",
-        name: "1/F Quiet Study Zone 1",
+        name: "1/F Quiet Study Zone 1 🤫",
         type: "reading",
         left: "7%",
         top: "9.4%",
@@ -188,7 +188,7 @@ export const floors = {
       },
       {
         id: "1F_study2",
-        name: "1/F Quiet Study Zone 2",
+        name: "1/F Quiet Study Zone 2 🤫",
         type: "reading",
         left: "41%",
         top: "9.4%",
@@ -203,7 +203,7 @@ export const floors = {
       },
       {
         id: "1F_study3",
-        name: "1/F Quiet Study Zone 3",
+        name: "1/F Quiet Study Zone 3 🤫",
         type: "reading",
         left: "64.7%",
         top: "9.4%",
@@ -218,7 +218,7 @@ export const floors = {
       },
       {
         id: "1F_study4",
-        name: "1/F Quiet Study Zone 4",
+        name: "1/F Quiet Study Zone 4 🤫",
         type: "reading",
         left: "17.1%",
         top: "31.1%",
@@ -233,7 +233,7 @@ export const floors = {
       },
       {
         id: "1F_study6",
-        name: "1/F Quiet Study Zone 6",
+        name: "1/F Quiet Study Zone 6 🤫",
         type: "reading",
         left: "53.1%",
         top: "31.1%",
@@ -248,7 +248,7 @@ export const floors = {
       },
       {
         id: "1F_study5",
-        name: "1/F Quiet Study Zone 5",
+        name: "1/F Quiet Study Zone 5 🤫",
         type: "reading",
         left: "29.6%",
         top: "42.6%",
@@ -263,7 +263,7 @@ export const floors = {
       },
       {
         id: "1F_study10",
-        name: "1/F Quiet Study Zone 10",
+        name: "1/F Quiet Study Zone 10 🤫",
         type: "reading",
         left: "40.8%",
         top: "66.9%",
@@ -278,7 +278,7 @@ export const floors = {
       },
       {
         id: "1F_study7",
-        name: "1/F Quiet Study Zone 7",
+        name: "1/F Quiet Study Zone 7 🤫",
         type: "reading",
         left: "3.2%",
         top: "87.3%",
@@ -308,7 +308,7 @@ export const floors = {
       },
       {
         id: "1F_study9",
-        name: "1/F Quiet Study Zone 9",
+        name: "1/F Quiet Study Zone 9 🤫",
         type: "reading",
         left: "21.8%",
         top: "67.3%",
@@ -323,7 +323,7 @@ export const floors = {
       },
       {
         id: "1F_study11",
-        name: "1/F Quiet Study Zone 11",
+        name: "1/F Quiet Study Zone 11 🤫",
         type: "reading",
         left: "52.015%",
         top: "66.9%",
@@ -338,7 +338,7 @@ export const floors = {
       },
       {
         id: "1F_study12",
-        name: "1/F Quiet Study Zone 12",
+        name: "1/F Quiet Study Zone 12 🤫",
         type: "reading",
         left: "63.26%",
         top: "66.9%",
@@ -380,7 +380,7 @@ export const floors = {
         zones: [
       {
         id: "GF_study5",
-        name: "G/F Quiet Study Zone 5",
+        name: "G/F Quiet Study Zone 5 🤫",
         type: "reading",
         left: "38.5%",
         top: "69.2%",
@@ -395,7 +395,7 @@ export const floors = {
       },
       {
         id: "GF_study9",
-        name: "G/F Quiet Study Zone 9",
+        name: "G/F Quiet Study Zone 9 🤫",
         type: "reading",
         left: "76.8%",
         top: "42.7%",
@@ -410,7 +410,7 @@ export const floors = {
       },
       {
         id: "GF_study2",
-        name: "G/F Quiet Study Zone 2",
+        name: "G/F Quiet Study Zone 2 🤫",
         type: "reading",
         left: "34.8%",
         top: "0.7%",
@@ -425,7 +425,7 @@ export const floors = {
       },
       {
         id: "GF_study6",
-        name: "G/F Quiet Study Zone 6",
+        name: "G/F Quiet Study Zone 6 🤫",
         type: "reading",
         left: "50.405%",
         top: "69.2%",
@@ -440,7 +440,7 @@ export const floors = {
       },
       {
         id: "GF_study7",
-        name: "G/F Quiet Study Zone 7",
+        name: "G/F Quiet Study Zone 7 🤫",
         type: "reading",
         left: "62.34%",
         top: "69.2%",
@@ -485,7 +485,7 @@ export const floors = {
       },
       {
         id: "GF_study4",
-        name: "G/F Quiet Study Zone 4",
+        name: "G/F Quiet Study Zone 4 🤫",
         type: "reading",
         left: "47.34%",
         top: "24.4%",
@@ -500,7 +500,7 @@ export const floors = {
       },
       {
         id: "GF_study1",
-        name: "G/F Quiet Study Zone 1",
+        name: "G/F Quiet Study Zone 1 🤫",
         type: "reading",
         left: "0%",
         top: "50.9%",

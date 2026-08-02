@@ -230,6 +230,19 @@ body {
   transition: 0.2s;
 }
 
+.map-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zone-emoji {
+  font-size: 15px;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
 .map-zone:hover {
   background: rgba(125, 5, 93, 0.28);
   border-color: rgba(255, 255, 255, 0.9);
@@ -1172,6 +1185,11 @@ body {
   margin-left: -70px;
 }
 
+
+.zone-emoji {
+  font-size: 10px;
+}
+
 }
 
 
@@ -1528,13 +1546,14 @@ body {
     position: static;
     top: 100px;
     font-weight: 100;
+    font-size: 12px;
   }
   .occupancy-rate-header {
     margin: 0 0 6px;
   }
 
   .occupancy-rate-bar {
-    width: 180%;
+    width: 198%;
     height: 6px;
     margin: 0;
     position: static;
@@ -1543,7 +1562,7 @@ body {
   #occupancy_rate_text{
     font-size: 14px;
     font-weight: 100;
-    margin-bottom: -2px;
-    margin-top: 3px;
+    margin-bottom: 0px;
+    margin-top: 2px;
   }
 }
