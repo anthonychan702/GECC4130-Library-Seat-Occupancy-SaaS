@@ -7,16 +7,6 @@ from backend.model.forecast import forecast_today_response
 
 def get_predicted_occupancy_data():
 
-    series = forecast_today_response()
-
-    # return {
-    #     "library_name": "CUHK CC Library",
-    #     "series": series,
-    #     "last_updated": datetime.now(timezone.utc)
-    # }
-
-
-    # Mock data
     return {
         "library_name": "CUHK CC Library",
         "next_period": "4pm",
@@ -24,3 +14,16 @@ def get_predicted_occupancy_data():
         "predicted_peak": "2pm",
         "last_updated": datetime.now(timezone.utc)
     }
+
+
+
+# def get_predicted_occupancy_data(db: Session):
+#     historical_rows = db.query(OccupancyReading).all()
+
+#     forecast_response = forecast_today_response(
+#         historical_rows,
+#         lookback_weeks=8,
+#         max_capacity=500,
+#     )
+
+#     return forecast_response
