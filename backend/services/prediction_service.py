@@ -9,10 +9,18 @@ def get_predicted_occupancy_data():
 
     series = forecast_today_response()
 
+    # return {
+    #     "library_name": "CUHK CC Library",
+    #     "series": series,
+    #     "last_updated": datetime.now(timezone.utc)
+    # }
 
 
+    # Mock data
     return {
         "library_name": "CUHK CC Library",
-        "series": series,
+        "next_period": "4pm",
+        "predicted_occupancy": 127,
+        "predicted_peak": "2pm",
         "last_updated": datetime.now(timezone.utc)
     }
