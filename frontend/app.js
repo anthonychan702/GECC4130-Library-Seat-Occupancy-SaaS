@@ -324,6 +324,9 @@ function buildChartData(series, hours, weekday, cutoffHour = null) {
  async function initCharts(){
 
     try{
+
+
+    
     const [todaySeries, lastSeries] = await Promise.all([
       fetch(`${API_BASE}/occupancy/today`),
       fetch(`${API_BASE}/occupancy/last-week`)
@@ -370,7 +373,22 @@ const lastWeekOccupancyData = buildChartData(
   weekday
 );
 
+const chartValues = [
+  ...todayOccupancyData,
+  ...lastWeekOccupancyData,
+]
+  .filter(value => value !== null)
+  .map(value => Number(value))
+  .filter(value => Number.isFinite(value));
 
+const maxOccupancy = chartValues.length > 0
+  ? Math.max(...chartValues)
+  : 0;
+
+const yMax = Math.max(Math.ceil(maxOccupancy * 1.2), 50);
+
+console.log("Chart max occupancy:", maxOccupancy);
+console.log("Chart suggested y max:", yMax);
 
     occupancyChart = new Chart(occupancyCtx, {
         type: "line",
@@ -480,6 +498,7 @@ verticalLinePlugin: {
                 y: {
                     display: false,
                     beginAtZero: true,
+                    suggestedMax: yMax,
                     grid: { display: false },
                     border: { display: false }
                 }
@@ -664,8 +683,6 @@ Chart.register(verticalLinePlugin);
 
 loadDashboard();
 initCharts();
-
-
 
 
 
