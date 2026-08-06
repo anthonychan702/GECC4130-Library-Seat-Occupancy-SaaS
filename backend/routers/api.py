@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Header, HTTPException, status, Response, Depends
 from pydantic import BaseModel, Field
 from datetime import datetime, time, timedelta
-from typing import Optional
+from typing import List, Optional, Union
 import os
 
 from sqlalchemy.orm import Session
@@ -58,8 +58,13 @@ HKT = ZoneInfo("Asia/Hong_Kong")
 
 # sensors payload
 
-class OccupancyReadingCreate(BaseModel):
-    signal: int
+class OccupancySingle(BaseModel):
+    signal: int # 0 or 1
+
+class OccupancyBuffer(BaseModel):
+    signal: List[int] # [0, 1, 1, 0, 0, 1]
+
+OccupancyReadingCreate = Union[OccupancySingle, OccupancyBuffer]
 
 
 class EnvironmentalReadingCreate(BaseModel):
@@ -135,10 +140,24 @@ def create_occupancy_reading(sensor: OccupancyReadingCreate, x_sensor_key: str |
 
     current_occupancy = 0 if row is None else row.occupant_count
 
-    if sensor.signal == 1:
-        current_occupancy += 1
-    elif sensor.signal == 0:
-        current_occupancy -= 1
+
+    i = ""
+    j = 0
+    if isinstance(sensor, OccupancyBuffer):
+        for s in sensor.signal:
+            if s == 1:
+                current_occupancy += 1
+                j+=1
+            elif s == 0:
+                current_occupancy -= 1
+                j-=1
+        i = f"+{j}" if j >= 0 else f"{j}"
+    elif isinstance(sensor, OccupancySingle):
+        if sensor.signal == 1:
+            current_occupancy += 1
+        elif sensor.signal == 0:
+            current_occupancy -= 1
+        i = "+1" if sensor.signal == 1 else "-1"
 
 
     current_occupancy = 0 if current_occupancy < 0 else current_occupancy
@@ -162,12 +181,12 @@ def create_occupancy_reading(sensor: OccupancyReadingCreate, x_sensor_key: str |
     db.execute(stmt)
     db.commit()
 
-    x = "+1" if sensor.signal == 1 else "-1"
+
     return {
         "message": "Occupancy reading received",
         "current_occupancy": current_occupancy,
         "received_data": sensor.signal,
-        "occupancy": x,
+        "occupancy": i,
         "received_at": now,
     }
 
