@@ -992,7 +992,7 @@ body {
   }
 
   .occupancy-rate-bar {
-    width: 130%;
+    width: 100%;
     height: 8px;   /* thinner */
     background: rgba(255, 255, 255, 0.72);
     border-radius: 999px;
@@ -1223,7 +1223,6 @@ body {
 .occupancy-rate-block {
   margin-top: 14px;
   width: 100%;
-  max-width: 360px;
 }
 
 .occupancy-rate-header {
@@ -1238,7 +1237,7 @@ body {
 }
 
 .occupancy-rate-bar {
-  width: 130%;
+  width: 100%;
   height: 8px;   /* thinner */
   background: rgba(255, 255, 255, 0.72);
   border-radius: 999px;
@@ -1315,11 +1314,6 @@ body {
     top: 15px;
   }
 
-  #occupancy-rate-bar{
-    position: fixed;
-    top: 1500px;
-    border: solid 1px black;
-  }
 }
 
 
@@ -1368,9 +1362,6 @@ body {
 
 
 
-
-
-
   .occupancy-right,
   .occupancy-left{
     margin-top: 0px;
@@ -1398,11 +1389,6 @@ body {
     top: 15px;
   }
 
-  #occupancy-rate-bar{
-    position: fixed;
-    top: 0px;
-  }
-
   .occupancy-card {
     position: relative;
     height: 200px;
@@ -1423,29 +1409,10 @@ body {
   #occupancy-rate-bar {
     position: absolute;
     left: 14px;
-    right: 14px;
+    right: 600px;
     bottom: 12px;
     top: auto;
   }
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   .occupancy-card {
     position: relative;
@@ -1485,9 +1452,8 @@ body {
   .occupancy-rate-block {
     position: absolute;
     left: 17px;
+    right: 17px;          /* instead of fixed width */
     bottom: 14px;
-    width: 175px;
-    max-width: calc(100% - 34px);
     margin: 0;
   }
 
@@ -1496,7 +1462,7 @@ body {
   }
 
   .occupancy-rate-bar {
-    width: 230%;
+    width: 92.5%;
     margin: 0;
     position: static;
   }
@@ -1529,10 +1495,9 @@ body {
   .occupancy-rate-block {
     position: absolute;
     left: 17px;
+    right: 17px;         /* instead of fixed width */
     top: 89px;
     bottom: 14px;
-    width: 175px;
-    max-width: calc(100% - 34px);
     margin: 0;
   }
   #occupancy_mes {
@@ -1553,7 +1518,7 @@ body {
   }
 
   .occupancy-rate-bar {
-    width: 198%;
+    width: 91%;
     height: 6px;
     margin: 0;
     position: static;
