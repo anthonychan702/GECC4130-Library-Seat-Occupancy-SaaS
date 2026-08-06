@@ -120,9 +120,9 @@ def create_occupancy_reading(sensor: OccupancyReadingCreate, x_sensor_key: str |
     verify_sensor_key(x_sensor_key)
 
     now = datetime.now(HKT)
-    if not time(8, 20) < now.time() < time(22, 0):
-        print("CC library is still not opened yet")
-        return {"message": "CC library is not opened yet",}
+    # if not time(8, 20) < now.time() < time(22, 0):    
+    #     print("CC library is still not opened yet")
+    #     return {"message": "CC library is not opened yet",}
 
     hour_str = now.strftime("%Y-%m-%d_%H")
     row = db.query(OccupancyReading).filter(OccupancyReading.hour_str == hour_str).first()
