@@ -45,6 +45,16 @@ class EnvironmentalReading(Base):
 
 
 
+class OccupancyRecord(Base):
+    __tablename__ = "occupancy_records"
+    recorded_at: Mapped[str] = mapped_column(String(30), primary_key = True)
+    occupant_change: Mapped[str] = mapped_column(String(13), nullable=False)
+    occupant_count: Mapped[int] = mapped_column(Integer, nullable=False)
+
+
+
+
+
 
 
 def get_db():

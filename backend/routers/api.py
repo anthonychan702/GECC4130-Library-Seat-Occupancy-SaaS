@@ -5,7 +5,7 @@ from typing import List, Optional, Union
 import os
 
 from sqlalchemy.orm import Session
-from ..db.db import get_db, OccupancyReading, EnvironmentalReading
+from ..db.db import get_db, OccupancyReading, EnvironmentalReading, OccupancyRecord
 from sqlalchemy.dialects.postgresql import insert
 
 
@@ -64,7 +64,19 @@ class OccupancySingle(BaseModel):
 class OccupancyBuffer(BaseModel):
     signal: List[int] # [0, 1, 1, 0, 0, 1]
 
-OccupancyReadingCreate = Union[OccupancySingle, OccupancyBuffer]
+class OccupancyRecorded(BaseModel):
+    signal: int      #  0 or 1
+    recorded_at: str # "2026-08-07_15:12:59"
+
+class OccupancyReader(BaseModel):
+    series: List[OccupancyRecorded]         
+# like series = [{"signal": 1, "recorded_at": "2026-08-07_15:12:59"}, 
+#                {"signal": 0, "recorded_at": "2026-08-07_15:58:12"}]
+
+
+
+
+OccupancyReadingCreate = Union[OccupancySingle, OccupancyBuffer, OccupancyReader, OccupancyRecorded]
 
 
 class EnvironmentalReadingCreate(BaseModel):
@@ -125,6 +137,7 @@ def create_occupancy_reading(sensor: OccupancyReadingCreate, x_sensor_key: str |
     verify_sensor_key(x_sensor_key)
 
     now = datetime.now(HKT)
+    formatted_time = now.strftime("%Y-%m-%d_%H:%M:%S")
     # if not time(8, 20) < now.time() < time(22, 0):    
     #     print("CC library is still not opened yet")
     #     return {"message": "CC library is not opened yet",}
@@ -152,6 +165,7 @@ def create_occupancy_reading(sensor: OccupancyReadingCreate, x_sensor_key: str |
                 current_occupancy -= 1
                 j-=1
         i = f"+{j}" if j >= 0 else f"{j}"
+
     elif isinstance(sensor, OccupancySingle):
         if sensor.signal == 1:
             current_occupancy += 1
@@ -159,9 +173,41 @@ def create_occupancy_reading(sensor: OccupancyReadingCreate, x_sensor_key: str |
             current_occupancy -= 1
         i = "+1" if sensor.signal == 1 else "-1"
 
+    elif isinstance(sensor, OccupancyRecorded):
+        if sensor.signal == 1:
+            current_occupancy += 1
+            j+=1
+        elif sensor.signal == 0:
+            current_occupancy -= 1
+            j-=1
+
+        i = f"+{j}" if j >= 0 else f"{j}"
+
+    elif isinstance(sensor, OccupancyReader):
+        for r in sensor.series:
+            if r.signal == 1:
+                current_occupancy += 1
+                j+=1
+            elif r.signal == 0:
+                current_occupancy -= 1
+                j-=1
+            i = f"+{j}" if j >= 0 else f"{j}"
+
+
+
+
+
 
     current_occupancy = 0 if current_occupancy < 0 else current_occupancy
 
+
+
+    record = insert(OccupancyRecord).values(
+        recorded_at = formatted_time,
+        occupant_change = i,
+        occupant_count = current_occupancy,
+    )
+    db.execute(record)
 
 
     stmt = insert(OccupancyReading).values(
@@ -181,11 +227,16 @@ def create_occupancy_reading(sensor: OccupancyReadingCreate, x_sensor_key: str |
     db.execute(stmt)
     db.commit()
 
+    received_data = (
+        [r.signal for r in sensor.series]
+        if isinstance(sensor, OccupancyReader)
+        else sensor.signal
+    )
 
     return {
         "message": "Occupancy reading received",
         "current_occupancy": current_occupancy,
-        "received_data": sensor.signal,
+        "received_data": received_data,
         "occupancy": i,
         "received_at": now,
     }
@@ -215,7 +266,7 @@ def create_environment_reading(sensor: EnvironmentalReadingCreate, x_sensor_key:
     verify_sensor_key(x_sensor_key)
 
     now = datetime.now(HKT)
-    sensor.humidity *= 100
+    sensor.humidity *= 1
 
     type = sensor.zone.split("_")[1].rstrip("0123456789")
 

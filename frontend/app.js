@@ -162,7 +162,7 @@ async function loadDashboard(){
 }
 
 
-const timeID = setInterval(loadDashboard, 1000);   // 1 update per second
+const timeID = setInterval(loadDashboard, 10000);   // 10 seconds, 1 update
 
 
 
@@ -349,6 +349,21 @@ const nowHKT = new Date().toLocaleString("en-US", {
   hourCycle: "h23"
 });
 
+
+const now = new Date();
+
+  const dateParts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Hong_Kong',
+    day: 'numeric',
+    month: 'numeric',
+    weekday: 'long',
+  }).formatToParts(now);
+
+  const getPart = (type) =>
+    dateParts.find((part) => part.type === type)?.value;
+
+  const wkday = getPart('weekday');
+
 const currentHour = Number(nowHKT);
 
 const currentHourIndex = chartHours.indexOf(currentHour);
@@ -425,7 +440,7 @@ pointRadius: (context) => {
   order: 1
                 },
                 {
-                    label: "Last Week",
+                    label: `Last ${wkday}`,
                     data: lastWeekOccupancyData,
                     borderColor: "rgba(171,145,59,0.78)",
                     backgroundColor: "rgba(120, 96, 28, 0.38)",
@@ -848,12 +863,30 @@ function updateHKTClock() {
     timeZone: 'Asia/Hong_Kong',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
+    // second: '2-digit',
     hour12: true,
   }).format(now);
 
-  document.getElementById('occupancy_clock').textContent = `${time}`;
+
+  const dateParts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Hong_Kong',
+    day: 'numeric',
+    month: 'numeric',
+    weekday: 'short',
+  }).formatToParts(now);
+
+  const getPart = (type) =>
+    dateParts.find((part) => part.type === type)?.value;
+
+  const day = getPart('day');
+  const month = getPart('month');
+  const weekday = getPart('weekday');
+
+  document.getElementById('occupancy_clock').textContent = `${day}/${month} (${weekday})   ${time}`;
 }
 
 updateHKTClock();
 setInterval(updateHKTClock, 1000);
+
+
+
