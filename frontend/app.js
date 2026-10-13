@@ -918,7 +918,96 @@ async function prepareRecommendation() {
   return findRecommendedZone();
 }
 
+function getMetricStatistics(zones, metric) {
+  const values = zones
+    .map((zone) => zone.stats?.[metric])
+    .filter(
+      (value) =>
+        value !== null &&
+        value !== undefined &&
+        value !== ""
+    )
+    .map(Number)
+    .filter(Number.isFinite);
 
+  if (values.length === 0) {
+    return { mean: null, sd: null };
+  }
+
+  const mean =
+    values.reduce((sum, value) => sum + value, 0) /
+    values.length;
+
+  const variance =
+    values.reduce(
+      (sum, value) => sum + (value - mean) ** 2,
+      0
+    ) / values.length;
+
+  return {
+    mean,
+    sd: Math.sqrt(variance),
+  };
+}
+
+function getStandardizedPreferenceTerm(
+  preference,
+  value,
+  mean,
+  sd,
+  metric
+) {
+  // An ignored metric contributes nothing, even if its data is missing.
+  if (preference === "idc" || preference === "") {
+    return {
+      score: 0,
+      formula: "No preference → 0",
+    };
+  }
+
+  const directions = {
+    temperature: { cooler: -1, warmer: 1 },
+    noise: { quiet: -1, lively: 1 },
+    humidity: { dryer: -1, wetter: 1 },
+  };
+
+  const direction = directions[metric]?.[preference];
+
+  if (direction === undefined) {
+    return {
+      score: NaN,
+      formula: `Unknown ${metric} preference: ${preference}`,
+    };
+  }
+
+  if (
+    !Number.isFinite(value) ||
+    !Number.isFinite(mean) ||
+    !Number.isFinite(sd)
+  ) {
+    return {
+      score: NaN,
+      formula: `Missing or invalid ${metric} data`,
+    };
+  }
+
+  if (sd === 0) {
+    return {
+      score: 0,
+      formula: "SD = 0 → all values are equal → 0",
+    };
+  }
+
+  const z = (value - mean) / sd;
+
+  return {
+    score: direction * z,
+    formula:
+      direction === 1
+        ? `(${value} - ${mean}) / ${sd}`
+        : `(${mean} - ${value}) / ${sd}`,
+  };
+}
 
 
 
@@ -1004,29 +1093,37 @@ function findRecommendedZone() {
   const noisePreference = normalize(savedPref.noise);
   const humidityPreference = normalize(savedPref.humidity);
 
-  // One baseline: selected floor OR whole library.
-  const averageTemperature = getFloorAverage(
-    averageZones,
-    "temperature"
-  );
+  const {
+    mean: averageTemperature,
+    sd: sdTemperature,
+  } = getMetricStatistics(averageZones, "temperature");
 
-  const averageNoise = getFloorAverage(
-    averageZones,
-    "noise"
-  );
+  const {
+    mean: averageNoise,
+    sd: sdNoise,
+  } = getMetricStatistics(averageZones, "noise");
 
-  const averageHumidity = getFloorAverage(
-    averageZones,
-    "humidity"
-  );
+  const {
+    mean: averageHumidity,
+    sd: sdHumidity,
+  } = getMetricStatistics(averageZones, "humidity");
 
   console.log(`Recommendation average scope: ${averageScopeLabel}`);
 
-  console.log("Environmental averages used:", {
-    temperature: averageTemperature,
-    noise: averageNoise,
-    humidity: averageHumidity,
-  });
+console.log("Environmental statistics used:", {
+  temperature: {
+    mean: averageTemperature,
+    sd: sdTemperature,
+  },
+  noise: {
+    mean: averageNoise,
+    sd: sdNoise,
+  },
+  humidity: {
+    mean: averageHumidity,
+    sd: sdHumidity,
+  },
+});
 
   let bestZone = null;
   let bestFloorKey = null;
@@ -1052,69 +1149,84 @@ function findRecommendedZone() {
       return;
     }
 
-    candidates.forEach((zone) => {
-      const temperature = getNumber(zone.stats?.temperature);
-      const noise = getNumber(zone.stats?.noise);
-      const humidity = getNumber(zone.stats?.humidity);
+candidates.forEach((zone) => {
+  // Read this zone's actual environmental values.
+  const temperature = getNumber(zone.stats?.temperature);
+  const noise = getNumber(zone.stats?.noise);
+  const humidity = getNumber(zone.stats?.humidity);
 
-      const temperatureTerm = getPreferenceTerm(
-        temperaturePreference,
-        temperature,
-        averageTemperature,
-        10,
-        "temperature"
-      );
+  const temperatureTerm = getStandardizedPreferenceTerm(
+    temperaturePreference,
+    temperature,
+    averageTemperature,
+    sdTemperature,
+    "temperature"
+  );
 
-      const noiseTerm = getPreferenceTerm(
-        noisePreference,
-        noise,
-        averageNoise,
-        1,
-        "noise"
-      );
+  const noiseTerm = getStandardizedPreferenceTerm(
+    noisePreference,
+    noise,
+    averageNoise,
+    sdNoise,
+    "noise"
+  );
 
-      const humidityTerm = getPreferenceTerm(
-        humidityPreference,
-        humidity,
-        averageHumidity,
-        1,
-        "humidity"
-      );
+  const humidityTerm = getStandardizedPreferenceTerm(
+    humidityPreference,
+    humidity,
+    averageHumidity,
+    sdHumidity,
+    "humidity"
+  );
 
-      const score =
-        temperatureTerm.score +
-        noiseTerm.score +
-        humidityTerm.score;
+  const score =
+    temperatureTerm.score +
+    noiseTerm.score +
+    humidityTerm.score;
 
-      console.group(`Score calculation: ${zone.name}`);
-
-      console.log(`Average scope: ${averageScopeLabel}`);
-
-      console.log(
-        `Temperature: ${temperatureTerm.formula} = ${temperatureTerm.score}`
-      );
-
-      console.log(
-        `Noise: ${noiseTerm.formula} = ${noiseTerm.score}`
-      );
-
-      console.log(
-        `Humidity: ${humidityTerm.formula} = ${humidityTerm.score}`
-      );
-
-      console.log(
-        `Final score = ${temperatureTerm.score} + ` +
-        `${noiseTerm.score} + ${humidityTerm.score} = ${score}`
-      );
-
-      console.groupEnd();
-
-      if (score > bestScore) {
-        bestScore = score;
-        bestZone = zone;
-        bestFloorKey = floorKey;
-      }
+  // Skip zones missing data for a metric the user cares about.
+  if (!Number.isFinite(score)) {
+    console.warn(`Skipping zone: ${zone.name}`, {
+      temperature: temperatureTerm.formula,
+      noise: noiseTerm.formula,
+      humidity: humidityTerm.formula,
     });
+
+    return;
+  }
+
+  console.group(`Score calculation: ${zone.name}`);
+
+  console.log(`Average scope: ${averageScopeLabel}`);
+
+  console.log(
+    `Temperature: ${temperatureTerm.formula} = ${temperatureTerm.score}`
+  );
+
+  console.log(
+    `Noise: ${noiseTerm.formula} = ${noiseTerm.score}`
+  );
+
+  console.log(
+    `Humidity: ${humidityTerm.formula} = ${humidityTerm.score}`
+  );
+
+  console.log(
+    `Final score = ${temperatureTerm.score} + ` +
+    `${noiseTerm.score} + ${humidityTerm.score} = ${score}`
+  );
+
+  console.groupEnd();
+
+  if (score > bestScore) {
+    bestScore = score;
+    bestZone = zone;
+    bestFloorKey = floorKey;
+  }
+});
+
+
+
   });
 
   if (!bestZone) {
@@ -1205,11 +1317,17 @@ function normalize(value) {
 }
 
 function getNumber(value) {
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return null;
+  }
+
   const number = Number(value);
 
-  return Number.isFinite(number)
-    ? number
-    : null;
+  return Number.isFinite(number) ? number : null;
 }
 
 function getFloorAverage(zones, field) {
